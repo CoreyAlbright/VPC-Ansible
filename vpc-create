@@ -1,0 +1,6 @@
+# Basic creation example:
+      ec2_vpc:
+        state: present
+        cidr_block: 172.23.0.0/16
+        resource_tags: { "Environment":"Provision" }
+        region: us-west-2

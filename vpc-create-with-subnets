@@ -1,0 +1,32 @@
+# Full creation example with subnets and optional availability zones.
+# The absence or presence of subnets deletes or creates them respectively.
+      ec2_vpc:
+        state: present
+        cidr_block: 172.15.0.0/16
+        resource_tags: { "Environment":"Production" }
+        subnets:
+          - cidr: 172.15.254.0/24
+            az: us-west-2a
+            resource_tags: { "Environment":"Dev", "Tier" : "Web" }
+          - cidr: 172.15.253.0/24
+            az: us-west-2b
+            resource_tags: { "Environment":"Dev", "Tier" : "App" }
+          - cidr: 172.15.252.0/24
+            az: us-west-2c
+            resource_tags: { "Environment":"Dev", "Tier" : "DB" }
+        internet_gateway: True
+        route_tables:
+          - subnets:
+              - 172.15.254.0/24
+              - 172.15.253.0/24
+            routes:
+              - dest: 0.0.0.0/0
+                gw: igw
+          - subnets:
+              - 172.15.252.0/24
+            routes:
+              - dest: 0.0.0.0/0
+                gw: igw
+        region: us-west-2
+      register: vpc
+
